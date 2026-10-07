@@ -28,6 +28,17 @@ html[data-accent="violet"] {
   --accent-rgb: 199, 125, 255;
 }
 
+html[data-accent="mono"] {
+  --bg: #09090b;
+  --bg-2: #111114;
+  --surface: rgba(30, 30, 34, 0.6);
+  --line: rgba(255, 255, 255, 0.11);
+  --accent: #eef1f5;
+  --accent-rgb: 238, 241, 245;
+  --on-accent: #0a0a0b;
+  --glow: 0 0 22px rgba(255, 255, 255, 0.28);
+}
+
 /* light theme (hero + instrument screens stay dark via .force-dark) */
 html[data-theme="light"] {
   --bg: #f5f8fc;
@@ -61,6 +72,21 @@ html[data-theme="light"] .force-dark {
 html[data-theme="light"][data-accent="violet"] .force-dark {
   --bg: #0b0716; --bg-2: #120b22; --surface: rgba(34, 18, 52, 0.6); --line: rgba(200, 140, 255, 0.15);
   --accent: #c77dff; --accent-rgb: 199, 125, 255;
+}
+
+html[data-theme="light"][data-accent="mono"] {
+  --bg: #fafafa;
+  --bg-2: #f1f1f3;
+  --line: rgba(0, 0, 0, 0.1);
+  --accent: #18181b;
+  --accent-rgb: 24, 24, 27;
+  --on-accent: #ffffff;
+  --glow: 0 0 16px rgba(0, 0, 0, 0.12);
+}
+html[data-theme="light"][data-accent="mono"] .force-dark {
+  --bg: #09090b; --bg-2: #111114; --surface: rgba(30, 30, 34, 0.6); --line: rgba(255, 255, 255, 0.11);
+  --accent: #eef1f5; --accent-rgb: 238, 241, 245; --on-accent: #0a0a0b;
+  --glow: 0 0 22px rgba(255, 255, 255, 0.28);
 }
 
 /* ================= base ================= */
@@ -300,8 +326,9 @@ html[data-eco="on"] .eco-badge { display: inline; }
 .dock button:hover::after, .dock button:focus-visible::after { opacity: 1; transform: translateY(-50%); }
 .mode-ico { display: none; }
 html[data-mode="system"] .mode-ico.system, html[data-mode="light"] .mode-ico.light, html[data-mode="dark"] .mode-ico.dark { display: block; }
-.accent-dot { width: 16px; height: 16px; border-radius: 50%; background: conic-gradient(from 200deg, #39d5ff, #c77dff, #39d5ff); box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.25); }
-html[data-accent="violet"] .accent-dot { background: conic-gradient(from 20deg, #c77dff, #39d5ff, #c77dff); }
+.accent-dot { width: 16px; height: 16px; border-radius: 50%; background: conic-gradient(#39d5ff 0 50%, #c77dff 50% 80%, #eef1f5 80%); box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.25); }
+html[data-accent="violet"] .accent-dot { background: conic-gradient(#c77dff 0 50%, #eef1f5 50% 80%, #39d5ff 80%); }
+html[data-accent="mono"] .accent-dot { background: conic-gradient(#eef1f5 0 50%, #39d5ff 50% 80%, #c77dff 80%); }
 #ecoBtn .leaf { transition: transform 0.4s; }
 html[data-eco="on"] #ecoBtn { color: var(--eco); background: rgba(61, 220, 132, 0.15); box-shadow: 0 0 14px rgba(61, 220, 132, 0.35); }
 html[data-eco="on"] #ecoBtn .leaf { transform: rotate(-14deg); }

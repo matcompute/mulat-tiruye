@@ -54,14 +54,22 @@
   });
 
   /* ---------------- accent ---------------- */
-  const ACCENTS = { cyan: "Cyan Nova", violet: "Violet Pulse" };
+  const ACCENTS = { cyan: "Cyan Nova", violet: "Violet Pulse", mono: "Mono White" };
+  const ACCENT_TOAST = {
+    cyan: "Cyan Nova 💠 Cool as a clean channel.",
+    violet: "Violet Pulse 💜 Same physics, new vibe.",
+    mono: "Mono White 🤍 Clean, classic, zero distractions."
+  };
   function applyAccent(a, say) {
     root.dataset.accent = a;
     $("#accentBtn").dataset.tip = "Colour: " + ACCENTS[a];
     store("accent", a); redraw();
-    if (say) toast(a === "cyan" ? "Cyan Nova 💠 Cool as a clean channel." : "Violet Pulse 💜 Same physics, new vibe.");
+    if (say) toast(ACCENT_TOAST[a]);
   }
-  $("#accentBtn").addEventListener("click", () => applyAccent(root.dataset.accent === "cyan" ? "violet" : "cyan", true));
+  $("#accentBtn").addEventListener("click", () => {
+    const order = Object.keys(ACCENTS);
+    applyAccent(order[(order.indexOf(root.dataset.accent) + 1) % order.length], true);
+  });
 
   /* ---------------- eco ---------------- */
   const ECO_ON = [
@@ -81,7 +89,7 @@
   $("#ecoBtn").addEventListener("click", () => applyEco(!UI.eco(), true));
 
   applyMode(root.dataset.mode || "system");
-  applyAccent(root.dataset.accent || "cyan");
+  applyAccent(ACCENTS[root.dataset.accent] ? root.dataset.accent : "cyan");
   applyEco(UI.eco());
 
   // low battery? offer eco mode politely, once per visit
