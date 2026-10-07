@@ -49,7 +49,7 @@
     fit(); addEventListener("resize", fit);
   })();
 
-  /* ---------------- hero: dotted world + radio links ---------------- */
+  /* ---------------- hero: dotted world map ---------------- */
   (function hero() {
     const cv = $("#heroCanvas"), ctx = cv.getContext("2d");
     // rough continent blobs in normalised map coords: [cx, cy, rx, ry]
@@ -64,7 +64,7 @@
       const n = 0.18 * Math.sin(x * 37 + y * 11) * Math.cos(y * 29 - x * 7);
       return land.some(([cx, cy, rx, ry]) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 < 1 + n);
     };
-    let W, H, dpr = 1, map, nodes = [], links = [], t0 = performance.now(), mx = 0, my = 0;
+    let W, H, dpr = 1, map, mx = 0, my = 0;
     const box = () => { // world map box, sized to cover the whole hero
       const w = Math.max(W * 1.04, H * 1.7), h = w * 0.5;
       return { x: (W - w) / 2, y: (H - h) / 2 + H * 0.04, w, h };
@@ -81,72 +81,33 @@
       for (let gy = 0; gy < b.h; gy += step) for (let gx = 0; gx < b.w; gx += step) {
         const nx = gx / b.w, ny = gy / b.h;
         if (!isLand(nx, ny)) continue;
-        const a = 0.18 + 0.35 * Math.abs(Math.sin(gx * 0.13 + gy * 0.07));
+        const a = 0.16 + 0.3 * Math.abs(Math.sin(gx * 0.13 + gy * 0.07));
         m.fillStyle = `rgba(${rgb}, ${a})`;
         m.beginPath(); m.arc(b.x + gx, b.y + gy, step * 0.17, 0, 7); m.fill();
       }
-      // nodes = "base stations" on visible land
-      nodes = []; let guard = 0;
-      while (nodes.length < 10 && guard++ < 4000) {
-        const nx = Math.random(), ny = Math.random();
-        const x = b.x + nx * b.w, y = b.y + ny * b.h;
-        if (isLand(nx, ny) && x > 20 && x < W - 20 && y > 60 && y < H - 20) nodes.push({ x, y, ph: Math.random() * 5 });
-      }
-      links = [];
-      for (let i = 0; i < 10 && nodes.length > 1; i++) {
-        const a = nodes[(Math.random() * nodes.length) | 0], c = nodes[(Math.random() * nodes.length) | 0];
-        if (a !== c) links.push({ a, c, sp: 0.06 + Math.random() * 0.1, off: Math.random() });
-      }
     }
-    const qp = (a, c, t) => { // point on arc
-      const cx = (a.x + c.x) / 2, cy = Math.min(a.y, c.y) - Math.hypot(c.x - a.x, c.y - a.y) * 0.35;
-      const u = 1 - t;
-      return [u * u * a.x + 2 * u * t * cx + t * t * c.x, u * u * a.y + 2 * u * t * cy + t * t * c.y, cx, cy];
-    };
-    let heroVisible = true, looping = false;
-    function frame(now) {
-      if (!map.width || W !== cv.clientWidth) build(); // pane may start at 0×0
-      if (!map.width) { looping = true; return void requestAnimationFrame(frame); }
-      const t = (now - t0) / 1000, rgb = accentRGB(cv);
+    // static map: redraw only on resize, theme change or (mouse) parallax
+    let queued = false;
+    function frame() {
+      queued = false;
+      if (!map.width || W !== cv.clientWidth) build();
+      if (!map.width) return void setTimeout(kick, 250); // hidden at load: try again
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
-      ctx.save(); ctx.translate(mx * 10, my * 6);
-      ctx.drawImage(map, 0, 0, W, H);
-      for (const L of links) {
-        const [, , cx, cy] = qp(L.a, L.c, 0);
-        ctx.strokeStyle = `rgba(${rgb}, 0.13)`; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(L.a.x, L.a.y); ctx.quadraticCurveTo(cx, cy, L.c.x, L.c.y); ctx.stroke();
-        const p = (t * L.sp + L.off) % 1;
-        for (let k = 0; k < 10; k++) { // comet tail
-          const q = p - k * 0.012; if (q < 0) break;
-          const [x, y] = qp(L.a, L.c, q);
-          ctx.fillStyle = `rgba(${rgb}, ${0.9 * (1 - k / 10)})`;
-          ctx.beginPath(); ctx.arc(x, y, 1.8 * (1 - k / 12), 0, 7); ctx.fill();
-        }
-      }
-      for (const n of nodes) { // base stations emitting waves
-        for (let r = 0; r < 3; r++) {
-          const ph = ((t * 0.5 + n.ph + r / 3) % 1);
-          ctx.strokeStyle = `rgba(${rgb}, ${0.5 * (1 - ph)})`;
-          ctx.beginPath(); ctx.ellipse(n.x, n.y, 4 + ph * 34, (4 + ph * 34) * 0.45, 0, 0, 7); ctx.stroke();
-        }
-        ctx.fillStyle = "#fff"; ctx.shadowColor = `rgb(${rgb})`; ctx.shadowBlur = 12;
-        ctx.beginPath(); ctx.arc(n.x, n.y, 2.2, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
-      }
-      ctx.restore();
+      ctx.drawImage(map, mx * 10, my * 6, W, H);
       // central vignette keeps the headline readable
       const g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.45);
       g.addColorStop(0, "rgba(0,0,0,0.55)"); g.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-      looping = animate() && heroVisible;
-      if (looping) requestAnimationFrame(frame);
     }
-    const kick = () => { if (!looping) requestAnimationFrame(frame); };
-    new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; if (heroVisible) kick(); }).observe(cv);
-    addEventListener("pointermove", (e) => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; });
+    const kick = () => { if (!queued) { queued = true; requestAnimationFrame(frame); } };
+    addEventListener("pointermove", (e) => {
+      if (!animate() || scrollY > innerHeight) return;
+      mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; kick();
+    });
     let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { build(); kick(); }, 150); });
     redrawers.push(() => { build(); kick(); });
-    ecoHooks.push(() => { build(); kick(); });
+    ecoHooks.push(() => { mx = my = 0; build(); kick(); });
     build(); kick();
   })();
 
