@@ -1,12 +1,7 @@
 (() => {
   const S = window.SITE;
   const $ = (s) => document.querySelector(s);
-  const root = document.documentElement;
-  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const eco = () => root.dataset.eco === "on";
-  const animate = () => !reduceMotion && !eco();
-  const accentRGB = (el = root) => getComputedStyle(el).getPropertyValue("--accent-rgb").trim() || "57, 213, 255";
-  const store = (k, v) => { try { localStorage.setItem(k, v); } catch (_) {} };
+  const { eco, animate, accentRGB, redrawers, ecoHooks } = window.UI;
 
   /* ---------------- content ---------------- */
   const soon = (n) => Array.from({ length: n }, (_, i) => `
@@ -43,96 +38,16 @@
 
   if (S.cv) { const b = $("#cvBtn"); b.href = S.cv; b.target = "_blank"; b.textContent = "CV (PDF)"; b.removeAttribute("aria-disabled"); }
 
-  $("#year").textContent = new Date().getFullYear();
+  document.querySelectorAll(".theme, .stack-panel, .lab-card, .sec-head, .blog-card").forEach((el) => el.classList.add("reveal"));
+  window.UI.reveal();
 
-  /* ---------------- reveal on scroll ---------------- */
-  document.querySelectorAll(".theme, .stack-panel, .lab-card, .sec-head").forEach((el) => el.classList.add("reveal"));
-  const io = new IntersectionObserver((es) => es.forEach((e) => {
-    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-  }), { threshold: 0.12 });
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-
-  /* ---------------- dock: theme · accent · eco ---------------- */
-  const redrawers = [], ecoHooks = [];
-  const redraw = () => redrawers.forEach((f) => f());
-  const pick = (a) => a[(Math.random() * a.length) | 0];
-  const toast = (() => {
-    const el = $("#toast"); let t;
-    return (text, action) => {
-      el.textContent = text;
-      if (action) {
-        const b = document.createElement("button");
-        b.textContent = action.label;
-        b.onclick = () => { el.classList.remove("show"); action.run(); };
-        el.append(b);
-      }
-      el.classList.add("show"); clearTimeout(t);
-      t = setTimeout(() => el.classList.remove("show"), action ? 7000 : 2600);
-    };
+  /* ---------------- hero sky scene: fit to screen shape ---------------- */
+  (function sky() {
+    const svg = $("#sky");
+    const fit = () => svg.setAttribute("preserveAspectRatio",
+      innerWidth / innerHeight < 1.15 ? "xMidYMax meet" : "xMidYMax slice");
+    fit(); addEventListener("resize", fit);
   })();
-
-  const lightMQ = matchMedia("(prefers-color-scheme: light)");
-  const MODES = {
-    system: "System theme 🖥️ Following your device.",
-    light: "Light mode ☀️ Hello, daylight.",
-    dark: "Dark mode 🌙 OLED pixels get to nap."
-  };
-  function applyMode(mode, say) {
-    root.dataset.mode = mode;
-    root.dataset.theme = mode === "system" ? (lightMQ.matches ? "light" : "dark") : mode;
-    $("#modeBtn").dataset.tip = "Theme: " + mode;
-    store("mode", mode); redraw();
-    if (say) toast(MODES[mode]);
-  }
-  lightMQ.addEventListener("change", () => { if (root.dataset.mode === "system") applyMode("system"); });
-  $("#modeBtn").addEventListener("click", () => {
-    const order = ["system", "light", "dark"];
-    applyMode(order[(order.indexOf(root.dataset.mode) + 1) % 3], true);
-  });
-
-  const ACCENTS = { cyan: "Cyan Nova", violet: "Violet Pulse" };
-  function applyAccent(a, say) {
-    root.dataset.accent = a;
-    $("#accentBtn").dataset.tip = "Colour: " + ACCENTS[a];
-    store("accent", a); redraw();
-    if (say) toast(a === "cyan" ? "Cyan Nova 💠 Cool as a clean channel." : "Violet Pulse 💜 Same physics, new vibe.");
-  }
-  $("#accentBtn").addEventListener("click", () => applyAccent(root.dataset.accent === "cyan" ? "violet" : "cyan", true));
-
-  const ECO_ON = [
-    "Eco mode on 🌱 Antennas switched to sleep state.",
-    "Eco mode on 🌱 Fewer frames, happier planet.",
-    "Eco mode on 🌱 Even 6G base stations take naps.",
-    "Eco mode on 🌱 Your battery just sent a thank-you note."
-  ];
-  const ECO_OFF = ["Eco mode off ⚡ Beams back on air.", "Eco mode off ⚡ The packets are flying again."];
-  function applyEco(on, say) {
-    root.dataset.eco = on ? "on" : "off";
-    $("#ecoBtn").dataset.tip = "Eco mode: " + (on ? "on" : "off");
-    $("#ecoBtn").setAttribute("aria-pressed", String(on));
-    store("eco", root.dataset.eco); ecoHooks.forEach((f) => f());
-    if (say) toast(pick(on ? ECO_ON : ECO_OFF));
-  }
-  $("#ecoBtn").addEventListener("click", () => applyEco(!eco(), true));
-
-  applyMode(root.dataset.mode || "system");
-  applyAccent(root.dataset.accent || "cyan");
-  applyEco(eco());
-
-  // low battery? offer eco mode politely, once per visit
-  if (navigator.getBattery) navigator.getBattery().then((b) => {
-    let asked = false;
-    const check = () => {
-      if (asked || eco() || b.charging || b.level > 0.2) return;
-      asked = true;
-      toast(`🔋 Battery at ${Math.round(b.level * 100)}%. Save some juice?`, { label: "Go eco", run: () => applyEco(true, true) });
-    };
-    check(); b.addEventListener("levelchange", check); b.addEventListener("chargingchange", check);
-  }).catch(() => {});
-
-  // nav stays dark while it floats over the (always dark) hero
-  new IntersectionObserver(([e]) => $("#nav").classList.toggle("force-dark", e.isIntersecting),
-    { rootMargin: "-60px 0px 0px 0px" }).observe($("#top"));
 
   /* ---------------- hero: dotted world + radio links ---------------- */
   (function hero() {
@@ -172,13 +87,13 @@
       }
       // nodes = "base stations" on visible land
       nodes = []; let guard = 0;
-      while (nodes.length < 16 && guard++ < 4000) {
+      while (nodes.length < 10 && guard++ < 4000) {
         const nx = Math.random(), ny = Math.random();
         const x = b.x + nx * b.w, y = b.y + ny * b.h;
         if (isLand(nx, ny) && x > 20 && x < W - 20 && y > 60 && y < H - 20) nodes.push({ x, y, ph: Math.random() * 5 });
       }
       links = [];
-      for (let i = 0; i < 18 && nodes.length > 1; i++) {
+      for (let i = 0; i < 10 && nodes.length > 1; i++) {
         const a = nodes[(Math.random() * nodes.length) | 0], c = nodes[(Math.random() * nodes.length) | 0];
         if (a !== c) links.push({ a, c, sp: 0.06 + Math.random() * 0.1, off: Math.random() });
       }

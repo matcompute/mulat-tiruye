@@ -361,3 +361,99 @@ html[data-eco="on"] .nav, html[data-eco="on"] .dock, html[data-eco="on"] .toast 
   .scroll-cue::after, .status::before, .stack::after, .logo-beam path, .brand-link span { animation: none; }
   .logo-m { animation: none; stroke-dashoffset: 0; }
 }
+
+/* ================= hero sky scene ================= */
+.sky { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; color: var(--accent); pointer-events: none; overflow: visible; }
+.sky text { font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em; fill: currentColor; }
+.sky .tag { text-anchor: middle; font-size: 12px; opacity: 0.8; }
+.ruler path { stroke: rgba(var(--accent-rgb), 0.35); stroke-width: 1; fill: none; }
+.ruler text { fill: rgba(var(--accent-rgb), 0.6); font-size: 11px; }
+.orbit { fill: none; stroke: rgba(var(--accent-rgb), 0.25); stroke-width: 1.2; stroke-dasharray: 2 8; }
+.orbiter { transform-box: view-box; transform-origin: 800px 1700px; animation: orbit 70s linear infinite; }
+.orbiter.late { animation-delay: -35s; }
+@keyframes orbit { from { transform: rotate(-34deg); } to { transform: rotate(34deg); } }
+.spot { fill: url(#spot); }
+.st-body rect, .st-body circle { fill: rgba(var(--accent-rgb), 0.18); stroke: currentColor; stroke-width: 1.4; }
+.st-body path, .hp-cells { stroke: currentColor; stroke-width: 1; fill: none; opacity: 0.7; }
+.links path { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-dasharray: 3 9; opacity: 0.6; animation: flow 1.4s linear infinite; }
+.links .faint { opacity: 0.18; animation-duration: 3s; }
+@keyframes flow { to { stroke-dashoffset: -24; } }
+.float { animation: bob 4.5s ease-in-out infinite; }
+.float.late { animation-delay: -2.2s; }
+.float.slow { animation: drift 14s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-12px); } }
+@keyframes drift { 50% { transform: translate(26px, -8px); } }
+.hp-body path, .hp-body rect { fill: rgba(var(--accent-rgb), 0.16); stroke: currentColor; stroke-width: 1.4; stroke-linejoin: round; }
+.hp-prop path, .dr-frame path { stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round; }
+.dr-frame rect { fill: rgba(var(--accent-rgb), 0.2); stroke: currentColor; stroke-width: 1.4; }
+.dr-rotor ellipse { fill: rgba(var(--accent-rgb), 0.25); stroke: currentColor; stroke-width: 0.8; transform-box: fill-box; transform-origin: center; animation: spin 0.18s linear infinite alternate; }
+@keyframes spin { to { transform: scaleX(0.35); } }
+.dr-led { fill: #fff; animation: blink 1.2s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0.2; } }
+.horizon { fill: url(#horizon); }
+.traces path { fill: none; stroke: rgba(var(--accent-rgb), 0.55); stroke-width: 1.4; }
+.tower.far { opacity: 0.45; }
+.tw-frame path { stroke: currentColor; stroke-width: 2; fill: none; stroke-linejoin: round; }
+.tw-frame .tw-brace { stroke-width: 0.9; opacity: 0.55; }
+.tw-panel rect, .tw-panel circle { fill: rgba(var(--accent-rgb), 0.22); stroke: currentColor; stroke-width: 1.4; }
+.tw-wave path { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; opacity: 0.1; animation: tw 2.4s ease-out infinite; }
+.tw-wave path:nth-child(2) { animation-delay: 0.3s; }
+.tw-wave path:nth-child(3) { animation-delay: 0.6s; }
+@keyframes tw { 15% { opacity: 1; } 70%, 100% { opacity: 0.08; } }
+.tw-beacon { fill: #ff5a6e; animation: blink 1.6s steps(2) infinite; }
+.edge rect { fill: rgba(var(--accent-rgb), 0.12); stroke: currentColor; stroke-width: 1.3; }
+.edge .leds { stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; animation: blink 0.9s steps(2) infinite; }
+.chip rect { fill: rgba(var(--accent-rgb), 0.3); }
+.chip path { stroke: currentColor; stroke-width: 1.6; }
+.chip text { text-anchor: middle; font-family: var(--display); font-size: 13px; fill: #fff; letter-spacing: 0.05em; }
+.chip { animation: bob 3.2s ease-in-out infinite; }
+.hero-inner { z-index: 3; }
+
+/* ================= blog ================= */
+.blog-card {
+  display: block; max-width: 760px; padding: clamp(1.4rem, 3vw, 2rem); color: var(--text);
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface);
+  position: relative; overflow: hidden; transition: border-color 0.25s, transform 0.25s;
+}
+.blog-card::after { content: ""; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(rgba(var(--accent-rgb), 0.25), transparent 70%); }
+.blog-card:hover { text-decoration: none; border-color: rgba(var(--accent-rgb), 0.55); transform: translateY(-3px); }
+.blog-card h3 { font-family: var(--display); font-weight: 400; font-size: clamp(1.05rem, 2.2vw, 1.35rem); line-height: 1.45; margin: 0.6rem 0; }
+.blog-card p { color: var(--muted); margin: 0; }
+.blog-meta { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); letter-spacing: 0.08em; }
+
+.post-hero {
+  padding: 9rem 0 4rem; position: relative; overflow: hidden; color: var(--text);
+  background: radial-gradient(ellipse at 70% 0%, rgba(var(--accent-rgb), 0.22), transparent 60%),
+    radial-gradient(circle, rgba(var(--accent-rgb), 0.12) 1px, transparent 1.5px) 0 0 / 16px 16px, var(--bg);
+}
+.post-hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(1.6rem, 4.4vw, 2.8rem); line-height: 1.3; margin: 0.8rem 0 1rem; max-width: 900px; color: var(--strong); }
+.post-hero p { color: var(--text-2); max-width: 680px; margin: 0; font-size: 1.08rem; }
+.crumbs { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+.crumbs a { color: var(--accent); }
+.prose { max-width: 760px; margin-inline: auto; font-size: 1.04rem; }
+.prose h2 { font-family: var(--display); font-weight: 400; font-size: clamp(1.2rem, 2.6vw, 1.55rem); margin: 3rem 0 1rem; line-height: 1.4; }
+.prose h3 { font-size: 1.05rem; margin: 2rem 0 0.5rem; }
+.prose p, .prose li { color: var(--text-2); }
+.prose li + li { margin-top: 0.4rem; }
+.prose blockquote { margin: 2rem 0; padding: 1rem 1.4rem; border-left: 3px solid var(--accent); background: rgba(var(--accent-rgb), 0.06); border-radius: 0 10px 10px 0; color: var(--text); }
+.prose .note { font-size: 0.85rem; color: var(--muted); }
+.scenarios { list-style: none; padding: 0; margin: 1.5rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; }
+.scenarios li { margin: 0; padding: 1.1rem 1.2rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.scenarios li.new { border-color: rgba(var(--accent-rgb), 0.5); }
+.scenarios b { display: block; font-size: 0.95rem; }
+.scenarios small { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase; }
+.scenarios span { display: block; font-size: 0.88rem; color: var(--muted); margin-top: 0.35rem; }
+.wheel { display: block; width: min(440px, 100%); margin: 1.5rem auto; color: var(--accent); }
+.wheel text { font-family: var(--mono); font-size: 10px; fill: var(--text); text-anchor: middle; }
+.wheel .hub { font-family: var(--display); font-size: 13px; fill: var(--accent); }
+.table-wrap { overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--line); border-radius: 12px; }
+.prose table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.prose th, .prose td { padding: 0.7rem 0.9rem; text-align: left; border-bottom: 1px solid var(--line); }
+.prose th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: rgba(var(--accent-rgb), 0.05); }
+.prose td:nth-child(2) { font-family: var(--mono); color: var(--accent); white-space: nowrap; }
+.prose tr:last-child td { border-bottom: 0; }
+.post-foot { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.posts { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+.wheel .w-old { fill: rgba(var(--accent-rgb), 0.06); }
+.wheel .w-new { fill: rgba(var(--accent-rgb), 0.3); }
+.wheel .w-hub { fill: rgba(var(--accent-rgb), 0.14); }
