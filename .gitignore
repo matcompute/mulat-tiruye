@@ -1,0 +1,14 @@
+# Private material: never commit or deploy
+/private/
+/*.pdf
+/*.png
+/*.docx
+
+# Leftovers from the old React app
+/node_modules/
+/build/
+
+# Local tooling
+/.claude/
+/.vercel/
+.DS_Store
