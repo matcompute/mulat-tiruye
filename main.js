@@ -111,6 +111,7 @@
     const fit = () => svg.setAttribute("preserveAspectRatio",
       innerWidth / innerHeight < 1.15 ? "xMidYMax meet" : "xMidYMax slice");
     fit(); addEventListener("resize", fit);
+    new IntersectionObserver(([e]) => svg.classList.toggle("paused", !e.isIntersecting)).observe(svg);
   })();
 
   /* ---------------- hero: dotted world map ---------------- */

@@ -559,3 +559,6 @@ html[data-eco="on"] .nav.scrolled { background: var(--bg); }
 .lb-nav.prev { left: 18px; } .lb-nav.next { right: 18px; }
 .lb-close:hover, .lb-nav:hover { background: rgba(var(--accent-rgb), 0.3); border-color: var(--accent); }
 @media (max-width: 600px) { .lb-nav { top: auto; bottom: 22px; transform: none; } .lb-nav.prev { left: calc(50% - 60px); } .lb-nav.next { right: calc(50% - 60px); } }
+
+/* pause the sky scene while it is off screen (saves CPU/GPU and battery) */
+.sky.paused *, .sky.paused { animation-play-state: paused !important; }
