@@ -100,6 +100,37 @@
   if (hero) new IntersectionObserver(([e]) => $("#nav").classList.toggle("force-dark", e.isIntersecting),
     { rootMargin: "-60px 0px 0px 0px" }).observe(hero);
 
+  /* ---------------- nav: glass on scroll, mobile menu, active link ---------------- */
+  const nav = $("#nav"), menuBtn = $("#menuBtn");
+  const onScroll = () => nav.classList.toggle("scrolled", scrollY > 40);
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  const setMenu = (open) => {
+    nav.classList.toggle("open", open);
+    if (menuBtn) { menuBtn.setAttribute("aria-expanded", String(open)); menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu"); }
+  };
+  if (menuBtn) {
+    menuBtn.addEventListener("click", (e) => { e.stopPropagation(); setMenu(!nav.classList.contains("open")); });
+    document.querySelectorAll("#navLinks a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
+    document.addEventListener("click", (e) => { if (!nav.contains(e.target)) setMenu(false); });
+    addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
+  }
+
+  // highlight the section currently on screen (same-page links only)
+  const navMap = new Map();
+  document.querySelectorAll('#navLinks a[href^="#"]').forEach((a) => {
+    const sec = document.querySelector(a.getAttribute("href"));
+    if (sec) navMap.set(sec, a);
+  });
+  if (navMap.size) {
+    const spy = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      navMap.forEach((a) => a.classList.remove("active"));
+      navMap.get(e.target).classList.add("active");
+    }), { rootMargin: "-45% 0px -50% 0px" });
+    navMap.forEach((_, sec) => spy.observe(sec));
+  }
+
   /* ---------------- reveal on scroll ---------------- */
   UI.reveal = () => {
     const io = new IntersectionObserver((es) => es.forEach((e) => {

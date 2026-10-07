@@ -447,3 +447,58 @@ html[data-eco="on"] .nav, html[data-eco="on"] .dock, html[data-eco="on"] .toast 
 .wheel .w-old { fill: rgba(var(--accent-rgb), 0.06); }
 .wheel .w-new { fill: rgba(var(--accent-rgb), 0.3); }
 .wheel .w-hub { fill: rgba(var(--accent-rgb), 0.14); }
+
+/* ================= nav: glass on scroll, active link, mobile menu ================= */
+.nav { border-bottom: 1px solid transparent; transition: background 0.3s, border-color 0.3s, padding 0.3s; }
+.nav.scrolled {
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom-color: var(--line); padding-block: 0.55rem;
+}
+.nav nav a.active { color: var(--text); }
+.nav nav a.active::after { transform: scaleX(1); }
+.menu-btn { display: none; margin-left: auto; width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; padding: 0; position: relative; }
+.menu-btn span { position: absolute; left: 11px; right: 11px; height: 2px; border-radius: 2px; background: var(--text); transition: transform 0.25s, opacity 0.2s, top 0.25s; }
+.menu-btn span:nth-child(1) { top: 14px; } .menu-btn span:nth-child(2) { top: 20px; } .menu-btn span:nth-child(3) { top: 26px; }
+.nav.open .menu-btn span:nth-child(1) { top: 20px; transform: rotate(45deg); }
+.nav.open .menu-btn span:nth-child(2) { opacity: 0; }
+.nav.open .menu-btn span:nth-child(3) { top: 20px; transform: rotate(-45deg); }
+
+/* ================= profile icons ================= */
+.social { list-style: none; display: flex; gap: 0.55rem; padding: 0; margin: 0; }
+.social a {
+  position: relative; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+  color: var(--text-2); border: 1px solid var(--line); background: var(--surface); transition: 0.2s;
+}
+.social a:hover { color: var(--accent); border-color: rgba(var(--accent-rgb), 0.6); box-shadow: var(--glow); transform: translateY(-2px); text-decoration: none; }
+.social svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.social a::after {
+  content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translate(-50%, 4px);
+  white-space: nowrap; font: 500 0.68rem var(--mono); color: var(--text); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 6px; padding: 0.2rem 0.5rem; opacity: 0; pointer-events: none; transition: 0.2s;
+}
+.social a:hover::after, .social a:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+.hero-social { justify-content: center; margin-top: 1.6rem; }
+.foot-social a { width: 34px; height: 34px; }
+.foot-social svg { width: 15px; height: 15px; }
+.foot { align-items: center; }
+.aff { color: var(--text); border-bottom: 1px dashed rgba(var(--accent-rgb), 0.6); }
+.aff:hover { color: var(--accent); text-decoration: none; }
+.address { margin: 1.5rem 0 0; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.04em; }
+
+@media (max-width: 860px) {
+  .menu-btn { display: block; }
+  .nav nav#navLinks {
+    display: flex; flex-direction: column; gap: 0; position: absolute; top: calc(100% + 6px); right: 12px; left: 12px; margin: 0;
+    padding: 0.5rem; border-radius: 16px; border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6);
+    opacity: 0; transform: translateY(-8px) scale(0.98); pointer-events: none; transition: 0.22s;
+  }
+  .nav.open nav#navLinks { opacity: 1; transform: none; pointer-events: auto; }
+  .nav nav#navLinks a { padding: 0.85rem 1rem; border-radius: 10px; font-size: 1rem; color: var(--text); }
+  .nav nav#navLinks a::after { display: none; }
+  .nav nav#navLinks a.active { background: rgba(var(--accent-rgb), 0.12); color: var(--accent); }
+  .foot { justify-content: center; text-align: center; }
+}
+html[data-eco="on"] .nav.scrolled { background: var(--bg); }
