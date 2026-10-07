@@ -12,3 +12,6 @@
 /.claude/
 /.vercel/
 .DS_Store
+
+# Local tools
+/tools/

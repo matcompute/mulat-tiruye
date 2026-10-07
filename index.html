@@ -61,6 +61,7 @@
       <a href="#publications">Papers</a>
       <a href="#news">News</a>
       <a href="blog/">Blog</a>
+      <a href="#life">Life</a>
       <a href="#contact">Contact</a>
     </nav>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
@@ -130,9 +131,9 @@
       <!-- altitude ruler -->
       <g class="ruler">
         <path d="M22 70V880"/>
-        <path d="M22 118h8M22 240h8M22 470h8M22 880h8"/>
+        <path d="M22 118h8M22 318h8M22 470h8M22 880h8"/>
         <text x="36" y="122">LEO · 550 km</text>
-        <text x="36" y="244">HAPS · 20 km</text>
+        <text x="36" y="322">HAPS · 20 km</text>
         <text x="36" y="474">UAV · 120 m</text>
       </g>
 
@@ -147,13 +148,13 @@
 
       <!-- data links: ground → air → stratosphere → space -->
       <g class="links">
-        <path d="M120 548 265 474 250 246 330 171"/>
+        <path d="M120 548 265 474 290 330 380 156"/>
         <path d="M1480 548 1340 434 1270 171"/>
       </g>
 
       <!-- HAPS -->
-      <g class="float slow"><use href="#haps" x="120" y="200" width="260" height="80"/></g>
-      <text class="tag" x="190" y="200">HAPS</text>
+      <g class="float slow"><use href="#haps" x="160" y="278" width="260" height="80"/></g>
+      <text class="tag" x="290" y="282">HAPS</text>
 
       <!-- drones -->
       <g class="float"><use href="#drone" x="215" y="444" width="100" height="60"/></g>
@@ -354,6 +355,30 @@
     </div>
   </section>
 
+  <!-- LIFE / GALLERY -->
+  <section class="section alt" id="life">
+    <div class="wrap">
+      <header class="sec-head">
+        <span class="sec-num">08</span>
+        <h2>Beyond the lab</h2>
+        <p>Mountains, new countries, conferences and late nights in the lab. The people and places behind the research.</p>
+      </header>
+      <ul class="hobbies" id="hobbyList"></ul>
+      <div class="filters" id="galleryFilters" role="tablist" aria-label="Filter photos"></div>
+      <div class="gallery" id="gallery"></div>
+    </div>
+  </section>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+    <button class="lb-close" data-lb="close" aria-label="Close">✕</button>
+    <button class="lb-nav prev" data-lb="prev" aria-label="Previous photo">‹</button>
+    <figure>
+      <img id="lbImg" alt="" />
+      <figcaption id="lbCap"></figcaption>
+    </figure>
+    <button class="lb-nav next" data-lb="next" aria-label="Next photo">›</button>
+  </dialog>
+
   <!-- CONTACT -->
   <section class="section contact" id="contact">
     <div class="wrap">
@@ -398,6 +423,7 @@
 
   <script src="ui.js" defer></script>
   <script src="content.js" defer></script>
+  <script src="assets/gallery/gallery.js" defer></script>
   <script src="main.js" defer></script>
 </body>
 </html>

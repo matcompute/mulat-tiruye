@@ -14,3 +14,12 @@ Edit `content.js`, then commit and push. Vercel redeploys automatically.
 
 ## Run locally
     python -m http.server 8080
+
+## Add photos (Beyond the lab gallery)
+1. Put photos in a tag folder: `private/photos-inbox/mountains/`, `travel/`, `labs/`, `events/` (or make a new one).
+   The file name becomes the caption: `dolomites-sunrise.jpg` → "Dolomites sunrise".
+2. Run `python tools/photos.py`. It fixes rotation, **removes GPS/EXIF data**, and writes
+   1600px + 640px WebP files to `assets/gallery/`, then adds them to `assets/gallery/gallery.js`.
+3. Optionally edit `caption` / `place` in `gallery.js`, then commit and push.
+
+Originals stay in `private/`, which is never committed or deployed.

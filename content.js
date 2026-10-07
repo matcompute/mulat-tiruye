@@ -41,6 +41,9 @@ window.SITE = {
       doi: "10.1109/MCSoC57363.2022.00031" }
   ],
 
+  /* Shown above the photo gallery. Photos themselves: see tools/photos.py */
+  hobbies: ["⛰️ Mountains & hiking", "✈️ Travel", "🧪 Lab life", "📡 Conferences"],
+
   /* Example: { org: "ETSI ISG ZSM", title: "GS ZSM 009-2", url: "https://..." } */
   reading: []
 };

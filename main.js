@@ -41,6 +41,70 @@
   document.querySelectorAll(".theme, .stack-panel, .lab-card, .sec-head, .blog-card").forEach((el) => el.classList.add("reveal"));
   window.UI.reveal();
 
+  /* ---------------- life: hobbies + photo gallery ---------------- */
+  (function gallery() {
+    const photos = window.GALLERY || [];
+    const grid = $("#gallery"), filters = $("#galleryFilters");
+    $("#hobbyList").innerHTML = (S.hobbies || []).map((h) => `<li>${h}</li>`).join("");
+
+    if (!photos.length) { // designed placeholders until real photos arrive
+      const slots = [["⛰️", "Mountains", "tall"], ["✈️", "Travel", ""], ["🧪", "Lab life", ""], ["📡", "Conferences", "tall"], ["🌍", "New countries", ""], ["🤝", "People I meet", ""]];
+      grid.innerHTML = slots.map(([ico, label, size]) =>
+        `<figure class="tile soon-tile ${size} reveal"><span class="soon-ico">${ico}</span><figcaption>${label}<small>Photos coming soon</small></figcaption></figure>`).join("");
+      filters.hidden = true;
+      window.UI.reveal();
+      return;
+    }
+
+    const tags = ["All", ...new Set(photos.map((p) => p.tag))];
+    let shown = photos;
+    filters.innerHTML = tags.map((t, i) =>
+      `<button role="tab" aria-selected="${i === 0}" data-tag="${t}">${t}</button>`).join("");
+    const esc = (t) => String(t || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const render = () => {
+      grid.innerHTML = shown.map((p, i) => `
+        <figure class="tile reveal" data-i="${i}" tabindex="0" role="button" aria-label="Open photo: ${esc(p.caption)}">
+          <img src="${p.thumb}" width="${p.w}" height="${p.h}" loading="lazy" decoding="async" alt="${esc(p.caption)}" />
+          <figcaption>${esc(p.caption)}<small>${[p.place, p.date].filter(Boolean).map(esc).join(" · ")}</small></figcaption>
+        </figure>`).join("");
+      window.UI.reveal();
+    };
+    filters.addEventListener("click", (e) => {
+      const b = e.target.closest("button"); if (!b) return;
+      filters.querySelectorAll("button").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+      shown = b.dataset.tag === "All" ? photos : photos.filter((p) => p.tag === b.dataset.tag);
+      render();
+    });
+
+    // lightbox
+    const lb = $("#lightbox"), img = $("#lbImg"), cap = $("#lbCap");
+    let at = 0;
+    const show = (i) => {
+      at = (i + shown.length) % shown.length;
+      const p = shown[at];
+      img.src = p.src; img.alt = p.caption || "";
+      cap.innerHTML = `${esc(p.caption)}<small>${[p.place, p.date].filter(Boolean).map(esc).join(" · ")}</small>`;
+    };
+    const open = (i) => { show(i); lb.showModal(); };
+    grid.addEventListener("click", (e) => { const t = e.target.closest(".tile"); if (t) open(+t.dataset.i); });
+    grid.addEventListener("keydown", (e) => { const t = e.target.closest(".tile"); if (t && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); open(+t.dataset.i); } });
+    lb.addEventListener("click", (e) => {
+      const a = e.target.dataset.lb;
+      if (a === "close" || e.target === lb) lb.close();
+      else if (a === "prev") show(at - 1);
+      else if (a === "next") show(at + 1);
+    });
+    lb.addEventListener("keydown", (e) => { if (e.key === "ArrowLeft") show(at - 1); if (e.key === "ArrowRight") show(at + 1); });
+    let x0 = null; // swipe on phones
+    lb.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener("touchend", (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
+    });
+    render();
+  })();
+
   /* ---------------- hero sky scene: fit to screen shape ---------------- */
   (function sky() {
     const svg = $("#sky");
