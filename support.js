@@ -3,7 +3,7 @@
    2. Paste its link below, e.g. "https://buymeacoffee.com/mulattiruye".
    Until then the menu shows, with the buttons marked "opening soon". */
 window.SUPPORT = {
-  url: "",
+  url: "https://buymeacoffee.com/mulattiruye",
   menu: [
     { icon: "☕", name: "Macchiato", note: "a quick espresso-sized thank you", price: "€3" },
     { icon: "🥛", name: "Cappuccino", note: "fuel for one late-night simulation", price: "€5" },
