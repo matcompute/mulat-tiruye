@@ -110,6 +110,15 @@
     const layers = document.querySelectorAll(".sky");
     new IntersectionObserver(([e]) => layers.forEach((l) => l.classList.toggle("paused", !e.isIntersecting)))
       .observe($("#top"));
+    // 6G badge: a little joke on click
+    const G6 = [
+      "6G: Thanks 5G, we'll take it from here 😎",
+      "6G: AI-native, sub-ms latency, now with extra satellites 🛰️",
+      "6G: 5G is not gone, it's in a long-term sleep mode 😴",
+      "6G: Shipping around 2030. Probably. 🤞"
+    ];
+    const g6 = document.querySelector(".g6");
+    if (g6) g6.addEventListener("click", () => window.UI.toast(G6[(Math.random() * G6.length) | 0]));
   })();
 
   /* ---------------- hero: dotted world map ---------------- */

@@ -194,6 +194,30 @@
       <g class="float"><use href="#drone" x="180" y="498" width="100" height="60"/></g>
       <g class="traces"><path d="M120 892H215L232 876H300M300 876 318 892H420"/></g>
       <g class="tower"><use href="#tower" x="60" y="540" width="120" height="360"/></g>
+
+      <!-- 6G delivers: tower → 6G ››› → [AI agent, AI brain, SDN, NFV]; 5G gets politely retired -->
+      <g class="g6stack">
+        <g class="kick5g">
+          <g class="spin5g">
+            <rect class="b5g" x="186" y="652" width="56" height="26" rx="13"/>
+            <text class="b5g-t" x="214" y="670">5G</text>
+          </g>
+          <text class="bye5g" x="250" y="660">see you soon! 🫡</text>
+        </g>
+        <g class="g6" role="button" aria-label="6G">
+          <rect class="b6g" x="182" y="600" width="64" height="32" rx="16"/>
+          <text class="b6g-t" x="214" y="622">6G</text>
+        </g>
+        <text class="thanks5g" x="214" y="590">Thanks 5G! 👋</text>
+        <g class="chev"><text x="258" y="623">›</text><text x="272" y="623">›</text><text x="286" y="623">›</text><text x="300" y="623">›</text></g>
+        <path class="bracket" d="M326 580V700M326 586h10M326 622h10M326 658h10M326 694h10"/>
+        <g class="chips">
+          <g><rect x="340" y="573" width="128" height="26" rx="8"/><text x="352" y="591">🤖 AI agent</text></g>
+          <g><rect x="340" y="609" width="128" height="26" rx="8"/><text x="352" y="627">🧠 AI brain</text></g>
+          <g><rect x="340" y="645" width="128" height="26" rx="8"/><text x="352" y="663">🔀 SDN</text></g>
+          <g><rect x="340" y="681" width="128" height="26" rx="8"/><text x="352" y="699">📦 NFV</text></g>
+        </g>
+      </g>
     </svg>
     <!-- right edge: UAV, tower, AI-RAN edge (scales with height, pinned right) -->
     <svg class="sky sky-side right" viewBox="1080 0 520 900" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">

@@ -622,3 +622,42 @@ html[data-theme="light"] .hero-fade {
   position: relative; z-index: 1; pointer-events: none;
   background: linear-gradient(var(--hero-bottom), var(--bg));
 }
+
+/* ================= 6G delivers (hero, left of the tower) ================= */
+.g6stack text { font-family: var(--mono); font-size: 12px; }
+.b6g { fill: var(--accent); filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.8)); }
+.sky .g6stack .b6g-t { font-family: var(--display) !important; font-size: 15px !important; fill: var(--on-accent); text-anchor: middle; }
+.g6 { pointer-events: auto; cursor: pointer; transform-box: fill-box; transform-origin: center; animation: g6pulse 16s ease-in-out infinite; }
+.g6:hover .b6g { filter: drop-shadow(0 0 14px rgba(var(--accent-rgb), 1)); }
+@keyframes g6pulse { 0%, 52%, 62%, 100% { transform: none; } 55% { transform: translateY(2px) rotate(-8deg); } 58% { transform: translateY(-2px) rotate(6deg); } }
+.sky .chev text { fill: currentColor; font-size: 18px !important; font-weight: 700; opacity: 0.15; animation: chev 1.2s linear infinite; }
+.chev text:nth-child(2) { animation-delay: 0.15s; } .chev text:nth-child(3) { animation-delay: 0.3s; } .chev text:nth-child(4) { animation-delay: 0.45s; }
+@keyframes chev { 30% { opacity: 1; } 70%, 100% { opacity: 0.15; } }
+.bracket { fill: none; stroke: rgba(var(--accent-rgb), 0.55); stroke-width: 1.4; }
+.chips rect { fill: rgba(var(--accent-rgb), 0.08); stroke: rgba(var(--accent-rgb), 0.45); stroke-width: 1.2; animation: chip 4.8s ease-in-out infinite; }
+.sky .chips text { fill: var(--text); }
+.chips g:nth-child(2) rect { animation-delay: 1.2s; } .chips g:nth-child(3) rect { animation-delay: 2.4s; } .chips g:nth-child(4) rect { animation-delay: 3.6s; }
+@keyframes chip { 0%, 30%, 100% { fill: rgba(var(--accent-rgb), 0.08); stroke: rgba(var(--accent-rgb), 0.45); } 12% { fill: rgba(var(--accent-rgb), 0.35); stroke: var(--accent); } }
+/* 5G: sits, gets kicked into the sky, sneaks back */
+.b5g { fill: rgba(142, 163, 184, 0.22); stroke: rgba(142, 163, 184, 0.7); stroke-width: 1.2; }
+.sky .g6stack .b5g-t { fill: #b9c6d3; text-anchor: middle; font-size: 13px !important; }
+.kick5g { animation: kick5g 16s cubic-bezier(.3, .6, .4, 1) infinite; }
+@keyframes kick5g { /* flight path: up and away, then sneak back */
+  0%, 56% { transform: none; opacity: 1; }
+  60% { transform: translate(-60px, -160px); opacity: 1; }
+  68% { transform: translate(-190px, -460px); opacity: 0; }
+  90% { transform: translate(0, 40px); opacity: 0; }
+  96%, 100% { transform: none; opacity: 1; }
+}
+.spin5g { transform-box: fill-box; transform-origin: center; animation: spin5g 16s cubic-bezier(.3, .6, .4, 1) infinite; }
+@keyframes spin5g { 0%, 56% { transform: none; } 68% { transform: rotate(-720deg); } 69%, 100% { transform: none; } }
+.sky .g6stack .bye5g, .sky .g6stack .thanks5g { fill: var(--text); opacity: 0; }
+.bye5g { animation: bye5g 16s linear infinite; }
+@keyframes bye5g { 0%, 56% { opacity: 0; } 58%, 64% { opacity: 1; } 68%, 100% { opacity: 0; } }
+.thanks5g { text-anchor: middle; animation: thanks5g 16s linear infinite; }
+@keyframes thanks5g { 0%, 46% { opacity: 0; } 49%, 60% { opacity: 1; } 64%, 100% { opacity: 0; } }
+@media (max-aspect-ratio: 23/20) { .sky-side .g6stack { display: none; } }
+@media (prefers-reduced-motion: reduce) { .g6, .chev text, .chips rect, .kick5g, .spin5g, .bye5g, .thanks5g { animation: none; } }
+/* let clicks reach the 6G badge through the empty parts of the hero text box */
+.hero-inner { pointer-events: none; }
+.hero-inner > * { pointer-events: auto; }
