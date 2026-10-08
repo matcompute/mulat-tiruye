@@ -139,6 +139,30 @@
     navMap.forEach((_, sec) => spy.observe(sec));
   }
 
+  /* ---------------- blog: coffee menu + share buttons ---------------- */
+  const support = $("#support"), SUP = window.SUPPORT;
+  if (support && SUP) {
+    const live = !!SUP.url;
+    support.querySelector(".coffee-menu").innerHTML = SUP.menu.map((c) => `
+      <a class="coffee" ${live ? `href="${SUP.url}" target="_blank" rel="noopener"` : 'aria-disabled="true"'}>
+        <span class="cup" aria-hidden="true">${c.icon}<i></i><i></i><i></i></span>
+        <b>${c.name}</b><span class="note">${c.note}</span><span class="price">${c.price}</span>
+      </a>`).join("");
+    support.querySelector(".coffee-status").textContent = live
+      ? "Opens Buy Me a Coffee in a new tab. Any amount is welcome. Amesegenalehu! 🙏"
+      : "The coffee shop is opening soon ☕";
+  }
+  const share = $("#share");
+  if (share) {
+    const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+    share.querySelector('[data-share="linkedin"]').href = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+    share.querySelector('[data-share="x"]').href = `https://x.com/intent/post?url=${url}&text=${title}`;
+    share.querySelector('[data-share="copy"]').addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(location.href.split("#")[0]); toast("Link copied 🔗 Ready for LinkedIn."); }
+      catch (_) { toast("Couldn't copy. Use the address bar ✋"); }
+    });
+  }
+
   /* ---------------- reveal on scroll ---------------- */
   UI.reveal = () => {
     const io = new IntersectionObserver((es) => es.forEach((e) => {

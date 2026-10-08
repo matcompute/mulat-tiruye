@@ -23,3 +23,7 @@ Edit `content.js`, then commit and push. Vercel redeploys automatically.
 3. Optionally edit `caption` / `place` in `gallery.js`, then commit and push.
 
 Originals stay in `private/`, which is never committed or deployed.
+
+## "Buy me a coffee" (blog pages)
+Create a free page on buymeacoffee.com (or ko-fi.com) and paste its link into `url` in `support.js`.
+Until then the coffee menu shows with "opening soon". Menu items and prices are in the same file.
