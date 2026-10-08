@@ -111,7 +111,7 @@
   <!-- HERO -->
   <section class="hero force-dark" id="top">
     <canvas id="heroCanvas" aria-hidden="true"></canvas>
-    <svg id="sky" class="sky" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <svg id="sky" class="sky sky-full" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
       <defs>
         <linearGradient id="horizon" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stop-color="currentColor" stop-opacity="0"/>
@@ -168,49 +168,41 @@
           </g>
         </symbol>
       </defs>
-
-      <!-- altitude ruler -->
-      <g class="ruler">
-        <path d="M22 70V880"/>
-        <path d="M22 118h8M22 318h8M22 470h8M22 880h8"/>
-        <text x="36" y="122">LEO · 550 km</text>
-        <text x="36" y="322">HAPS · 20 km</text>
-        <text x="36" y="474">UAV · 120 m</text>
-      </g>
-
-      <!-- LEO orbit + satellites with spot beams -->
-      <path class="orbit" d="M0 315A1600 1600 0 0 1 1600 315"/>
+      <!-- LEO orbit (top of the sky) + satellites -->
+      <path class="orbit" d="M0 262A1760 1760 0 0 1 1600 262"/>
       <g class="orbiter">
-        <use href="#sat" x="750" y="80" width="100" height="40"/>
+        <use href="#sat" x="750" y="50" width="100" height="40"/>
       </g>
       <g class="orbiter late">
-        <use href="#sat" x="750" y="80" width="100" height="40"/>
+        <use href="#sat" x="750" y="50" width="100" height="40"/>
       </g>
-
-      <!-- data links: ground → air → stratosphere → space -->
+    </svg>
+    <!-- left edge: ruler, HAPS, UAV, tower (scales with height, pinned left) -->
+    <svg class="sky sky-side left" viewBox="0 0 520 900" preserveAspectRatio="xMinYMax meet" aria-hidden="true">
+      <g class="ruler">
+        <path d="M22 60V880"/>
+        <path d="M22 96h8M22 214h8M22 520h8M22 880h8"/>
+        <text x="36" y="100">LEO · 550 km</text>
+        <text x="36" y="218">HAPS · 20 km</text>
+        <text x="36" y="524">UAV · 120 m</text>
+      </g>
       <g class="links">
-        <path d="M120 548 265 474 290 330 380 156"/>
-        <path d="M1480 548 1340 434 1270 171"/>
+        <path d="M120 548 230 528 270 236 400 40"/>
       </g>
-
-      <!-- HAPS -->
-      <g class="float slow"><use href="#haps" x="160" y="278" width="260" height="80"/></g>
-      <text class="tag" x="290" y="282">HAPS</text>
-
-      <!-- drones -->
-      <g class="float"><use href="#drone" x="215" y="444" width="100" height="60"/></g>
-      <g class="float late"><use href="#drone" x="1290" y="404" width="100" height="60"/></g>
-
-      <!-- ground: horizon, traces, towers, AI-RAN edge -->
-      <rect class="horizon" x="0" y="760" width="1600" height="140"/>
-      <g class="traces">
-        <path d="M120 892H215L232 876H300M300 876 318 892H420"/>
-        <path d="M1452 892H1440"/>
-        <path d="M1213 892H1268"/>
-      </g>
+      <g class="float slow"><use href="#haps" x="140" y="196" width="260" height="80"/></g>
+      <text class="tag" x="270" y="196">HAPS</text>
+      <g class="float"><use href="#drone" x="180" y="498" width="100" height="60"/></g>
+      <g class="traces"><path d="M120 892H215L232 876H300M300 876 318 892H420"/></g>
       <g class="tower"><use href="#tower" x="60" y="540" width="120" height="360"/></g>
+    </svg>
+    <!-- right edge: UAV, tower, AI-RAN edge (scales with height, pinned right) -->
+    <svg class="sky sky-side right" viewBox="1080 0 520 900" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
+      <g class="links">
+        <path d="M1480 548 1370 508 1220 40"/>
+      </g>
+      <g class="float late"><use href="#drone" x="1320" y="478" width="100" height="60"/></g>
+      <g class="traces"><path d="M1452 892H1440"/></g>
       <g class="tower"><use href="#tower" x="1420" y="540" width="120" height="360"/></g>
-
       <g transform="translate(1404 880) scale(.72) translate(-1325 -880)">
       <g class="edge">
         <circle cx="1325" cy="770" r="70" fill="url(#halo)"/>
@@ -248,6 +240,8 @@
     </div>
     <a class="scroll-cue" href="#focus" aria-label="Scroll down"></a>
   </section>
+
+  <div class="hero-fade" aria-hidden="true"></div>
 
   <!-- CURRENT FOCUS -->
   <section class="section" id="focus">

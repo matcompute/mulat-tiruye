@@ -105,13 +105,11 @@
     render();
   })();
 
-  /* ---------------- hero sky scene: fit to screen shape ---------------- */
+  /* ---------------- hero sky scene: pause all layers while off screen ---------------- */
   (function sky() {
-    const svg = $("#sky");
-    const fit = () => svg.setAttribute("preserveAspectRatio",
-      innerWidth / innerHeight < 1.15 ? "xMidYMax meet" : "xMidYMax slice");
-    fit(); addEventListener("resize", fit);
-    new IntersectionObserver(([e]) => svg.classList.toggle("paused", !e.isIntersecting)).observe(svg);
+    const layers = document.querySelectorAll(".sky");
+    new IntersectionObserver(([e]) => layers.forEach((l) => l.classList.toggle("paused", !e.isIntersecting)))
+      .observe($("#top"));
   })();
 
   /* ---------------- hero: dotted world map ---------------- */
