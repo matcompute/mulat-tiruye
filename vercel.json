@@ -5,6 +5,19 @@
   "installCommand": "echo no dependencies",
   "outputDirectory": ".",
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "matcompute.vercel.app"
+        }
+      ],
+      "destination": "https://www.mulattiruye.com/$1",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)\\.(png|webp|jpg|jpeg|svg)",
