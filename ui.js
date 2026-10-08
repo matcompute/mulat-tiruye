@@ -143,14 +143,23 @@
   const support = $("#support"), SUP = window.SUPPORT;
   if (support && SUP) {
     const live = !!SUP.url;
-    support.querySelector(".coffee-menu").innerHTML = SUP.menu.map((c) => `
-      <a class="coffee" ${live ? `href="${SUP.url}" target="_blank" rel="noopener"` : 'aria-disabled="true"'}>
+    // each cup links to its own fixed-price page if set (c.link), otherwise to the main page
+    support.querySelector(".coffee-menu").innerHTML = SUP.menu.map((c, i) => {
+      const href = c.link || SUP.url;
+      return `<a class="coffee" data-i="${i}" ${live ? `href="${href}" target="_blank" rel="noopener"` : 'aria-disabled="true"'}>
         <span class="cup" aria-hidden="true">${c.icon}<i></i><i></i><i></i></span>
         <b>${c.name}</b><span class="note">${c.note}</span><span class="price">${c.price}</span>
-      </a>`).join("");
+      </a>`;
+    }).join("");
     support.querySelector(".coffee-status").textContent = live
-      ? "Opens Buy Me a Coffee in a new tab. Any amount is welcome. Amesegenalehu! 🙏"
+      ? "Pick a cup: your coffee page opens in a new tab. Type the cup's amount there (any amount is welcome). Amesegenalehu! 🙏"
       : "The coffee shop is opening soon ☕";
+    // the coffee page can't be pre-filled, so remind people what to type
+    support.querySelector(".coffee-menu").addEventListener("click", (e) => {
+      const a = e.target.closest(".coffee"); if (!a || !live) return;
+      const c = SUP.menu[+a.dataset.i];
+      if (!c.link) toast(`${c.name} = ${c.price} ☕ Type ${c.price.replace(/[^0-9.,]/g, "")} in the amount box.`);
+    });
   }
   const share = $("#share");
   if (share) {

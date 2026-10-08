@@ -1,7 +1,10 @@
 /* "Buy me a coffee" settings, used at the end of blog pages.
    1. Create a free page on https://buymeacoffee.com (or https://ko-fi.com).
    2. Paste its link below, e.g. "https://buymeacoffee.com/mulattiruye".
-   Until then the menu shows, with the buttons marked "opening soon". */
+   Until then the menu shows, with the buttons marked "opening soon".
+   Optional: Buy Me a Coffee can't pre-fill an amount from a link. For exact prices,
+   create an "Extra" (fixed-price item) per cup on Buy Me a Coffee and add its link
+   to that cup as  link: "https://buymeacoffee.com/mulattiruye/e/123456"  */
 window.SUPPORT = {
   url: "https://buymeacoffee.com/mulattiruye",
   menu: [
