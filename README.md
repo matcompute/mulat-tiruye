@@ -27,3 +27,17 @@ Originals stay in `private/`, which is never committed or deployed.
 ## "Buy me a coffee" (blog pages)
 Create a free page on buymeacoffee.com (or ko-fi.com) and paste its link into `url` in `support.js`.
 Until then the coffee menu shows with "opening soon". Menu items and prices are in the same file.
+
+## Write a new blog post
+1. Create it (this also adds it to the blog list, the home page and the sitemap):
+
+       python tools/new_post.py "Post title" "One or two sentences that summarise it."
+
+   Options: `--slug my-url-name`, `--minutes 6`.
+2. Write the text in `blog/<slug>.html`, between the `WRITE HERE` comments.
+3. Preview: `python -m http.server 8080`, then open http://localhost:8080/blog/
+4. Publish:
+
+       git add -A
+       git commit -m "New post: <title>"
+       git push site site-main:main
